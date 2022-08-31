@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+    {% block title %}login{% endblock %}
+    {% block body %}
+    <link href="../static/styles.css" rel="stylesheet">
+    <img src = "../static/swamp.jpg" alt="background image" style="width : 1520px ; height : 800px">
+    <div>
+        
+        <div id="foreground">
+            <div class="mb-3">
+                <input class="mx-auto form-control" id="username" name="username" autocomplete="on" autofocus placeholder="Username" type="text">
+                <small class="form-text text-muted" id="error-message" ></small>
+            </div>
+            <div class="mb-3 form-group">
+                <input class="form-control mx-auto" id="password" name="password" placeholder="Password" type="password">
+            </div>
+            <button id="submit" class="btn btn-dark mx-auto">Log In</button>
+        </div>
+    </div>
+    <script>
+        let Input1 = document.getElementById("username")
+        let Input2 = document.getElementById("password")
+
+        document.getElementById("submit").addEventListener("click",function () {
+            let ajax = new XMLHttpRequest();
+            let auth = {"username":Input1.value,"password":Input2.value}
+            ajax.onreadystatechange = function(ajax) {
+                if ((ajax.readyState==4)&&(ajax.status==400)) {
+                    // auth failed 
+                    let error = JSON.parse(ajax.responseText)
+                    // invalid username
+                    if (error["error"] == "username") {
+                        changeState(Input1.id);
+                    }
+                    if (error["error"] == "password") {
+                        changeState(Input2.id)
+                    }
+                }
+            };
+            ajax.open("POST","/login",true)
+            ajax.send(JSON.stringify(auth))
+        });
+
+        function changeState(id) {
+            e = document.getElementById(id);
+            e.style.border = "5px";
+            e.style.borderColor = "red";
+        }
+        Input2.addEventListener("keydown",function(e) {
+            if (e.key == "Enter") {
+                document.getElementById("submit").click();
+            }
+        });
+
+    </script>
+    {% endblock %}
