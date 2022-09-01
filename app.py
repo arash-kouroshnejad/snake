@@ -4,6 +4,7 @@ from flask import Flask , render_template , redirect , request , session , Respo
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from cs50 import SQL
+import re
 
 app = Flask(__name__)
 
@@ -24,6 +25,7 @@ def after_request(response):
 
 # configure database of users
 db = SQL("sqlite:///users")
+db.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY NOT NULL,username TEXT NOT NULL,hash TEXT NOT NULL,score INTEGER NOT NULL,highest INTEGER NOT NULL,snake TEXT NOT NULL DEFAULT 'def')")
 
 @app.route("/")
 def game():
@@ -59,3 +61,28 @@ def login():
     session["user_id"] = rows[0]["id"]
     return redirect("/game")
 
+@app.route("/register",methods=["POST","GET"])
+def register():
+    # GET
+    if request.method == "GET":
+        return render_template("register.html")
+
+    # POST
+    username = request.get_json(force=True)["username"]
+    password = request.get_json(force=True)["username"]
+
+    # username validation
+    count = db.execute("SELECT COUNT(username) AS count FROM users WHERE username = ?",username)
+    if not (username and (count[0]["count"] == 0) and (len(username) > 6)):
+        return Response('{"error":"username"}') 
+
+    # password validation 
+    found = re.seach("[a-z]+[A-Z]+\d")
+    if not (password and (len(password) > 9) and found):
+        return Response('{"error":"password"}')
+
+    # password validation
+    db.execute("INSERT INTO users (username,hash,score,highest) VALUES (?,?,?,?)",username,generate_password_hash(password),0,0)
+    id = db.execute("SELECT id FROM users WHERE username = ?",username)
+    session["user_id"] = id
+    return redirect("/")

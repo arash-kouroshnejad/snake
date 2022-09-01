@@ -14,15 +14,15 @@
                 <input class="form-control mx-auto" id="password" name="password" placeholder="Password" type="password">
                 <small class="form-text" id="error-password" ></small>
             </div>
-            <button id="submit" class="btn btn-dark mx-auto">Log In</button>
-            <button id="register" class="btn btn-light mx-auto">Register</button>
+            <button id="register" class="btn btn-green mx-auto">Register</button>
+            <button id="login" class="btn btn-dark mx-auto">Log In</button>
         </div>
     </div>
     <script>
         let Input1 = document.getElementById("username")
         let Input2 = document.getElementById("password")
 
-        document.getElementById("submit").addEventListener("click",function () {
+        document.getElementById("register").addEventListener("click",function () {
             let ajax = new XMLHttpRequest();
             let auth = {"username":Input1.value,"password":Input2.value}
             ajax.onreadystatechange = function() {
@@ -42,7 +42,7 @@
                     }
                 }
             };
-            ajax.open("POST","/login",true)
+            ajax.open("POST","/register",true)
             ajax.send(JSON.stringify(auth))
         });
 
@@ -56,8 +56,8 @@
                 document.getElementById("submit").click();
             }
         });
-        document.getElementById("register").addEventListener("click",function() {
-            location.replace("/register");
+        document.getElementById("login").addEventListener("click",function() {
+            location.replace("/login");
         })
     </script>
     {% endblock %}
