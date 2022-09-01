@@ -1,4 +1,5 @@
 flask
 flask_session
-cs50
 werkzeug.security
+requests
+sqlite3

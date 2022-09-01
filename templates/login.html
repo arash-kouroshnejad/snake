@@ -8,10 +8,11 @@
         <div id="foreground">
             <div class="mb-3">
                 <input class="mx-auto form-control" id="username" name="username" autocomplete="on" autofocus placeholder="Username" type="text">
-                <small class="form-text text-muted" id="error-message" ></small>
+                <small class="form-text" id="error-username" ></small>
             </div>
             <div class="mb-3 form-group">
                 <input class="form-control mx-auto" id="password" name="password" placeholder="Password" type="password">
+                <small class="form-text" id="error-password" ></small>
             </div>
             <button id="submit" class="btn btn-dark mx-auto">Log In</button>
         </div>
@@ -23,16 +24,20 @@
         document.getElementById("submit").addEventListener("click",function () {
             let ajax = new XMLHttpRequest();
             let auth = {"username":Input1.value,"password":Input2.value}
-            ajax.onreadystatechange = function(ajax) {
-                if ((ajax.readyState==4)&&(ajax.status==400)) {
+            ajax.onreadystatechange = function() {
+                console.log(ajax.readyState,ajax.status)
+                if ((ajax.readyState==4)&&(ajax.status==403)) {
                     // auth failed 
-                    let error = JSON.parse(ajax.responseText)
+                    let error = JSON.parse(ajax.response)
+                    console.log(error["error"])
                     // invalid username
                     if (error["error"] == "username") {
                         changeState(Input1.id);
+                        document.getElementById("error-username").innerHTML = "Username does not exist.";
                     }
                     if (error["error"] == "password") {
                         changeState(Input2.id)
+                        document.getElementById("error-password").innerHTML = "Incorrect password.";
                     }
                 }
             };
@@ -42,8 +47,8 @@
 
         function changeState(id) {
             e = document.getElementById(id);
-            e.style.border = "5px";
-            e.style.borderColor = "red";
+            e.style.border = "3px solid";
+            e.style.borderColor = "#f00";
         }
         Input2.addEventListener("keydown",function(e) {
             if (e.key == "Enter") {

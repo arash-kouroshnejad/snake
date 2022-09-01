@@ -2,8 +2,8 @@
 # import neccessary libraries
 from flask import Flask , render_template , redirect , request , session , Response
 from flask_session import Session
-from cs50 import SQL
 from werkzeug.security import check_password_hash, generate_password_hash
+from cs50 import SQL
 
 app = Flask(__name__)
 
@@ -23,11 +23,13 @@ def after_request(response):
     return response
 
 # configure database of users
-db = SQL("sqlite:///users.db")
+db = SQL("sqlite:///users")
 
 @app.route("/")
 def game():
     # ensurre the user is logged in
+    rows = db.execute("SELECT * FROM users")
+    print(rows)
     if session.get("user_id") is None:
         return redirect("/login")
     
@@ -40,20 +42,20 @@ def login():
         return render_template("/login.html")
 
     # POST
-    if request.method("POST"):
-        username = request.form.get("username")
-        password  = request.form.get("password")
-        rows = db.execute("SELECT * FROM users WHERE username = ?")
+    username = request.get_json(force=True)["username"]
+    password  = request.get_json(force=True)["password"]
+    print(username,password)
+    rows = db.execute("SELECT * FROM users WHERE username = ?",username)
 
 
-        # check for invalid username
-        if not ((len(rows) == 1) and (username)):
-            return Response("{'error':'username'}",status=400,mimetype='application/json')
-        
-        # check for invalid password
-        if not (check_password_hash(rows[0]["hash"],password) and password):
-            return Response("{'error':'password'}",status=400)
+    # check for invalid username
+    if not ((len(rows) == 1) and (username)):
+        return Response('{"error":"username"}',status=403,mimetype='application/json')
+    
+    # check for invalid password
+    if not (check_password_hash(rows[0]["hash"],password) and password):
+        return Response('{"error":"password"}',status=403,mimetype="application/json")
 
-        session["user_id"] = rows[0]["id"]
-        return redirect("/game")
+    session["user_id"] = rows[0]["id"]
+    return redirect("/game")
 

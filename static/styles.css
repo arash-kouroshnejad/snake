@@ -1,7 +1,7 @@
 input {
     background-color : #24292E !important;
     color : rgb(255, 255, 255)!important;
-    border-color: aliceblue !important;
+    border-color: aliceblue;
 
 }
 #foreground {
@@ -29,4 +29,8 @@ body {
 
 image {
     width : 152m0px!important;
+}
+
+small {
+    color : red!important;
 }
