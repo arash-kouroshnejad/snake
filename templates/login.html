@@ -2,10 +2,10 @@
     {% block title %}login{% endblock %}
     {% block body %}
     <link href="../static/styles.css" rel="stylesheet">
-    <img src = "http://i.stack.imgur.com/SBv4T.gif" alt="background image" style="width : 100vw ; height : 100vh">
+    <img src = "http://i.stack.imgur.com/SBv4T.gif" alt="background image" id="background-image">
     <div>
         
-        <div id="foreground">
+        <div class="foreground login">
             <div class="mb-3">
                 <input class="mx-auto form-control" id="username" name="username" autocomplete="on" autofocus placeholder="Username" type="text">
                 <small class="form-text" id="error-username" ></small>
@@ -39,6 +39,9 @@
                     if (error["error"] == "password") {
                         changeState(Input2.id)
                         document.getElementById("error-password").innerHTML = "Incorrect password.";
+                    }
+                    if ((ajax.readyState==4)&&(ajax.status==200)) {
+                        location.replace("/snake")
                     }
                 }
             };

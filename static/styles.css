@@ -3,13 +3,10 @@ input {
     color : rgb(255, 255, 255)!important;
     border-color: aliceblue;
 }
-#foreground {
-    width : 20vw;
-    height : 30vh;
+.foreground {
     padding : 2% 0.5%;
     text-align : center;
     background-color : #24292E;
-    opacity : 0.6;
     color : rgb(255, 255, 255)!important;
     border-radius : 0.9em;
     margin : auto;
@@ -31,9 +28,35 @@ small {
     }
 }
 @media screen and (min-width : 500px) {
-    #foreground {
+    .foreground {
         position: absolute;
         top : 30%;
         left : 40%; 
+    }
+}
+#background-image {
+    width : 100vw;
+    height : 100vh;
+}
+.login {
+    width : 20vw;
+    height : 30vh;
+    opacity : 0.6;
+}
+.option {
+    width : 60vw;
+    position : absolute;
+    left : 20vw;
+}
+@media screen and (max-width : 500px) {
+    .option {
+        position : absolute;
+        width : 60vw;
+        left : 15vw;
+        height : 60vh;
+        top : 20vh;
+    }
+    img {
+        width : 70%;
     }
 }

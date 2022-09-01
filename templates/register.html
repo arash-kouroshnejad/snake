@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
-    {% block title %}login{% endblock %}
+    {% block title %}Register{% endblock %}
     {% block body %}
     <link href="../static/styles.css" rel="stylesheet">
     <img src = "http://i.stack.imgur.com/SBv4T.gif" alt="background image" style="width : 100vw ; height : 100vh">
     <div>
         
-        <div id="foreground">
+        <div class="foreground login">
             <div class="mb-3">
                 <input class="mx-auto form-control" id="username" name="username" autocomplete="on" autofocus placeholder="Username" type="text">
                 <small class="form-text" id="error-username" ></small>
@@ -27,19 +27,22 @@
             let auth = {"username":Input1.value,"password":Input2.value}
             ajax.onreadystatechange = function() {
                 console.log(ajax.readyState,ajax.status)
-                if ((ajax.readyState==4)&&(ajax.status==403)) {
+                if ((ajax.readyState==4)&&(ajax.status==400)) {
                     // auth failed 
                     let error = JSON.parse(ajax.response)
                     console.log(error["error"])
                     // invalid username
                     if (error["error"] == "username") {
                         changeState(Input1.id);
-                        document.getElementById("error-username").innerHTML = "Username does not exist.";
+                        document.getElementById("error-username").innerHTML = "Username unavailable.";
                     }
                     if (error["error"] == "password") {
                         changeState(Input2.id)
-                        document.getElementById("error-password").innerHTML = "Incorrect password.";
+                        document.getElementById("error-password").innerHTML = "password unavailable.";
                     }
+                }
+                if ((ajax.readyState==4)&&(ajax.status==302)) {
+                    location.replace("/snake")
                 }
             };
             ajax.open("POST","/register",true)
@@ -53,7 +56,7 @@
         }
         Input2.addEventListener("keydown",function(e) {
             if (e.key == "Enter") {
-                document.getElementById("submit").click();
+                document.getElementById("register").click();
             }
         });
         document.getElementById("login").addEventListener("click",function() {

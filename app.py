@@ -28,14 +28,18 @@ db = SQL("sqlite:///users")
 db.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY NOT NULL,username TEXT NOT NULL,hash TEXT NOT NULL,score INTEGER NOT NULL,highest INTEGER NOT NULL,snake TEXT NOT NULL DEFAULT 'def')")
 
 @app.route("/")
+def index():
+    return redirect("/snake")
+
+@app.route("/snake")
 def game():
     # ensurre the user is logged in
-    rows = db.execute("SELECT * FROM users")
-    print(rows)
     if session.get("user_id") is None:
         return redirect("/login")
     
-    # 
+    # user logged in
+    # render the game
+    return render_template("game.html")
 
 @app.route("/login",methods=["POST","GET"])
 def login():
@@ -46,7 +50,6 @@ def login():
     # POST
     username = request.get_json(force=True)["username"]
     password  = request.get_json(force=True)["password"]
-    print(username,password)
     rows = db.execute("SELECT * FROM users WHERE username = ?",username)
 
 
@@ -59,7 +62,7 @@ def login():
         return Response('{"error":"password"}',status=403,mimetype="application/json")
 
     session["user_id"] = rows[0]["id"]
-    return redirect("/game")
+    return Response("/snake",302)
 
 @app.route("/register",methods=["POST","GET"])
 def register():
@@ -69,20 +72,22 @@ def register():
 
     # POST
     username = request.get_json(force=True)["username"]
-    password = request.get_json(force=True)["username"]
+    password = request.get_json(force=True)["password"]
 
     # username validation
     count = db.execute("SELECT COUNT(username) AS count FROM users WHERE username = ?",username)
-    if not (username and (count[0]["count"] == 0) and (len(username) > 6)):
-        return Response('{"error":"username"}') 
+    if not (username and (count[0]["count"] == 0) and (len(username) > 3)):
+        return Response('{"error":"username"}',400) 
 
     # password validation 
-    found = re.seach("[a-z]+[A-Z]+\d")
-    if not (password and (len(password) > 9) and found):
-        return Response('{"error":"password"}')
+    found = re.search("[a-z]+",password)
+    found_2 = re.search("[A-Z]+",password)
+    found_3 = re.search("\d",password)
+    if not (password and found and found_2 and found_3):
+        return Response('{"error":"password"}',400)
 
     # password validation
     db.execute("INSERT INTO users (username,hash,score,highest) VALUES (?,?,?,?)",username,generate_password_hash(password),0,0)
     id = db.execute("SELECT id FROM users WHERE username = ?",username)
     session["user_id"] = id
-    return redirect("/")
+    return Response(None,302)
