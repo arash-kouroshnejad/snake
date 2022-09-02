@@ -40,9 +40,10 @@
                         changeState(Input2.id)
                         document.getElementById("error-password").innerHTML = "Incorrect password.";
                     }
-                    if ((ajax.readyState==4)&&(ajax.status==200)) {
-                        location.replace("/snake")
-                    }
+                    
+                }
+                if ((ajax.readyState==4)&&(ajax.status==302)) {
+                    location.replace("/snake")
                 }
             };
             ajax.open("POST","/login",true)
