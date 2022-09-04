@@ -16,20 +16,59 @@ function selectSnake(el) {
 
             // load resources
             gameScreen.innerHTML = ajax.responseText;
+
+            // Grabbing canvas reference
             canvas = document.getElementById("canvas")
             rect = canvas.getBoundingClientRect()
             ctx = canvas.getContext("2d")
+
+            // Coordinates
             x = rect.top + canvas.height/2;
             y = rect.left + canvas.width/6;
             s = Math.floor(Math.random()*canvas.width)
             t = Math.floor(Math.random()*canvas.height)
-            width = canvas.width;
-            height = canvas.height
-            size = "30px";  
+
+            // Canvas object
+            Canvas = new Object()
+            Canvas.rigth = 
+
+            // Dimensions
+            size = 2;
+            length = 40;
+
+            // Delay
+            delay = 40
+
+            // Change snake coordinates
+            dx = 2
+            dy = 0
+
+            // Set interval for looping canvas drawing 
+            intervalId = setInterval(play,delay)
+
+            // Key Pad
+            document.addEventListener("keydown", function () {
+
+                if (event.key == "Right"||event.key == "ArrowRight") {
+                    dx = 2
+                    dy = 0
+                }
+                if (event.key == "Left"||event.key == "ArrowLeft") {
+                    dx = -2
+                    dy = 0
+                }
+                if (event.key == "Down"||event.key == "ArrowDown") {
+                    dy = 2
+                    dx = 0
+                }
+                if (event.key == "Up"||event.key == "ArrowUp") {
+                    dy = -2
+                    dx = 0
+                }
+            })
 
 
-            // play 
-            play();
+
         }
     }
     ajax.open("post","/engine",true);
@@ -52,13 +91,20 @@ function play() {
 
     // Draw snake
     drawSnake(x,y,length,size);
-    debugger;
 
 
     // Draw apple
-    drawApple(s,t,size)
+    drawApple(s,t)
 
-    // 
+    // Change corodinates
+    x += dx;
+    y += dy;
+
+    // Border detection
+    if ((x+length >= rect.left + rect.width)||(y+size <= rect.top)) {
+        clearInterval(intervalId)
+
+    }
 
 } 
 
@@ -81,19 +127,17 @@ function drawSnake(x,y,width,height) {
 
 }
 
-function drawApple(s,t,size) {
+function drawApple(s,t) {
 
-    if ((x==s)&&(y==t)) {
-        s = Math.floor(MAth.random()*canvas.width)
-        y = Math.floor(Math.random()*canvas.height)
+    if ((s <= x)&&(x <= s+size)) {
+        s = Math.floor(Math.random()*canvas.width)
+        t = Math.floor(Math.random()*canvas.height)
     }
 
-    img = new Image();
-    img.onload = () => {
-
-        ctx.drawImage(img,s,t,size,size)
-
-    }
-    img.src = "../static/images/Apple.jpg"
+    ctx.beginPath();
+    ctx.rect(s,t,7,7)
+    ctx.fillstyle = "#f00";
+    ctx.fill();
+    ctx.closePath()
 
 }
