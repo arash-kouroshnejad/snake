@@ -91,3 +91,9 @@ def register():
     id = db.execute("SELECT id FROM users WHERE username = ?",username)
     session["user_id"] = id
     return Response(None,302)
+
+@app.route("/engine",methods=["POST"])
+def engine():
+    snakeType = request.get_json(force=True)["snake"]
+    db.execute("UPDATE users SET snake = ?",snakeType)
+    return render_template("container.html")

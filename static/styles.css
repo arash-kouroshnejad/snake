@@ -18,13 +18,15 @@ small {
     color : red!important;
 }
 @media screen and (max-width : 500px) {
-    #foreground {
-        position : fixed;
-        left : 25vw;
-        top : 20vh;
-        width : 50vw;
-        height : 50vh;
-        padding-top : 30%;
+    .foreground {
+        position : absolute;
+        left : 20vw;
+        top : 30vh;
+        right : 20  vw;
+        width : 60vw;
+        height : 40vh;
+        bottom : 30vh;
+        padding : 10% 10% 6% 10%; 
     }
 }
 @media screen and (min-width : 500px) {
@@ -32,6 +34,8 @@ small {
         position: absolute;
         top : 30%;
         left : 40%; 
+        height : 30%;
+        width : 20%;
     }
 }
 #background-image {
@@ -39,8 +43,6 @@ small {
     height : 100vh;
 }
 .login {
-    width : 20vw;
-    height : 30vh;
     opacity : 0.6;
 }
 .option {
@@ -48,7 +50,7 @@ small {
     position : absolute;
     left : 20vw;
 }
-@media screen and (max-width : 500px) {
+@media screen and (max-width : 1140px) {
     .option {
         position : absolute;
         width : 60vw;
