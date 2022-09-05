@@ -23,46 +23,48 @@ function selectSnake(el) {
             ctx = canvas.getContext("2d")
 
             // Coordinates
-            x = rect.top + canvas.height/2;
-            y = rect.left + canvas.width/6;
-            s = Math.floor(Math.random()*canvas.width)
-            t = Math.floor(Math.random()*canvas.height)
+            gridX = canvas.width/20;
+            gridY = canvas.height/10;
+            x = rect.top + canvas.width/2;
+            y = rect.left + canvas.height/2;
+            s = (Math.floor(Math.random()*20))*gridX+rect.left
+            t = (Math.floor(Math.random()*10))*gridY+rect.top
+            x = s
+            y = t
 
-            // Canvas object
-            Canvas = new Object()
-            Canvas.rigth = 
 
             // Dimensions
-            size = 2;
+            size = 5
             length = 40;
+            
 
             // Delay
-            delay = 40
+            delay = 200
 
             // Change snake coordinates
-            dx = 2
+            dx = gridX
             dy = 0
 
-            // Set interval for looping canvas drawing 
-            intervalId = setInterval(play,delay)
+            // Looping canvas drawing 
+            timeout()
 
             // Key Pad
             document.addEventListener("keydown", function () {
 
                 if (event.key == "Right"||event.key == "ArrowRight") {
-                    dx = 2
+                    dx = gridX
                     dy = 0
                 }
                 if (event.key == "Left"||event.key == "ArrowLeft") {
-                    dx = -2
+                    dx = -gridX
                     dy = 0
                 }
                 if (event.key == "Down"||event.key == "ArrowDown") {
-                    dy = 2
+                    dy = gridY
                     dx = 0
                 }
                 if (event.key == "Up"||event.key == "ArrowUp") {
-                    dy = -2
+                    dy = -gridY
                     dx = 0
                 }
             })
@@ -86,6 +88,7 @@ snake3.addEventListener("click",function () {
 
 // play
 function play() {
+    console.log(x)
     // Clear canvas
     ctx.clearRect(rect.left,rect.top,canvas.width,canvas.height)
 
@@ -94,18 +97,19 @@ function play() {
 
 
     // Draw apple
-    drawApple(s,t)
+    drawApple()
 
     // Change corodinates
     x += dx;
     y += dy;
 
-    // Border detection
-    if ((x+length >= rect.left + rect.width)||(y+size <= rect.top)) {
-        clearInterval(intervalId)
 
+    // Border detection
+    if ((x < rect.left)||(y < rect.top)||(rect.right < x)||(rect.bottom < y)) {
+        clearTimeout(timeoutId)
     }
 
+    timeout()
 } 
 
 
@@ -120,24 +124,32 @@ function modal() {
 function drawSnake(x,y,width,height) {
 
     ctx.beginPath();
-    ctx.rect(x,y,width,height);
+    ctx.rect(x,y,-width,-height);
     ctx.fillStyle = "#34deeb";
     ctx.fill();
     ctx.closePath();
 
 }
 
-function drawApple(s,t) {
+function drawApple() {
 
-    if ((s <= x)&&(x <= s+size)) {
-        s = Math.floor(Math.random()*canvas.width)
-        t = Math.floor(Math.random()*canvas.height)
+    if ((s == x)&&(t == y)) {
+        console.log("T is :"+t,"S is :"+s)
+        s = (Math.floor(Math.random()*20))*gridX+rect.left
+        t = (Math.floor(Math.random()*10))*gridY+rect.top
+        console.log("T is :"+t,"S is :"+s)
     }
 
     ctx.beginPath();
-    ctx.rect(s,t,7,7)
+    ctx.rect(rect.left+s,rect.top+t,size,size)
     ctx.fillstyle = "#f00";
     ctx.fill();
     ctx.closePath()
+
+}
+
+function timeout() {
+
+    timeoutId = setTimeout(play,delay)
 
 }
