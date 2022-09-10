@@ -1,13 +1,12 @@
 .container {
-    height : 50vh;
-    --height : calc(0.5*100vh);
-    width : var(--height);
+    width : 70vw;
+    height : 80vh;
     border : 5px solid #fff;
     border-radius : 1rem;
     text-align : center ;
     position : absolute ;
     top : 10vh;
-    left : calc(calc(100vw- var(--height))/2);
+    left : 15vw;
     background-color : #24292e;
 }
 

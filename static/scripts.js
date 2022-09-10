@@ -29,14 +29,13 @@ function selectSnake(el) {
             y = rect.left + canvas.height/2;
             s = (Math.floor(Math.random()*20))*gridX+rect.left
             t = (Math.floor(Math.random()*10))*gridY+rect.top
-            x = s
-            y = t
 
 
             // Dimensions
-            size = 5
+            size = 10
             length = 40;
-            
+            a = x - length
+            b = y - size/2;
 
             // Delay
             delay = 200
@@ -88,12 +87,13 @@ snake3.addEventListener("click",function () {
 
 // play
 function play() {
-    console.log(x)
+    console.log(y,canvas.height/7)
     // Clear canvas
     ctx.clearRect(rect.left,rect.top,canvas.width,canvas.height)
 
     // Draw snake
-    drawSnake(x,y,length,size);
+    drawHead();
+    drawBody();
 
 
     // Draw apple
@@ -105,7 +105,7 @@ function play() {
 
 
     // Border detection
-    if ((x < rect.left)||(y < rect.top)||(rect.right < x)||(rect.bottom < y)) {
+    if ((x == 0)||(x == canvas.width)||(y == 0)||(y == canvas.height)) {
         clearTimeout(timeoutId)
     }
 
@@ -121,19 +121,33 @@ function modal() {
     document.getElementsByTagName("img")[0].style.display = "none";
 }
 
-function drawSnake(x,y,width,height) {
+// Draw head
+function drawHead() {
 
     ctx.beginPath();
-    ctx.rect(x,y,-width,-height);
-    ctx.fillStyle = "#34deeb";
+    ctx.rect(x,y,-length/6,-size);
+    ctx.fillStyle = "#f00";
     ctx.fill();
     ctx.closePath();
 
 }
 
+// Draw body
+function drawBody() {
+    ctx.beginPath();
+    ctx.moveTo(a,b);
+    ctx.lineTo(x,y-size/2)
+    ctx.lineWidth = size;
+    ctx.strokeStyle = "#fff"
+    ctx.stroke()
+    a += dx
+    b += dy
+    ctx.closePath()
+}
+
 function drawApple() {
 
-    if ((s == x)&&(t == y)) {
+    if ((s <= x)&&(t <= y)&&(x <= s + size)&&(y <= t + size)) {
         console.log("T is :"+t,"S is :"+s)
         s = (Math.floor(Math.random()*20))*gridX+rect.left
         t = (Math.floor(Math.random()*10))*gridY+rect.top
@@ -142,7 +156,7 @@ function drawApple() {
 
     ctx.beginPath();
     ctx.rect(rect.left+s,rect.top+t,size,size)
-    ctx.fillstyle = "#f00";
+    ctx.fillStyle = "#f00";
     ctx.fill();
     ctx.closePath()
 
