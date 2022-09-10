@@ -34,8 +34,7 @@ function selectSnake(el) {
             // Dimensions
             size = 10
             length = 40;
-            a = x - length
-            b = y - size/2;
+
 
             // Delay
             delay = 200
@@ -43,6 +42,16 @@ function selectSnake(el) {
             // Change snake coordinates
             dx = gridX
             dy = 0
+
+            //Head & Tail
+            head = new coordinates(x,y) 
+            head = new node(head,null)
+            a = head.value.x - length;
+            b = head.value.y;
+            tail = new coordinates(a,b)
+            tail = new node(tail,head)
+
+
 
             // Looping canvas drawing 
             timeout()
@@ -87,7 +96,7 @@ snake3.addEventListener("click",function () {
 
 // play
 function play() {
-    console.log(y,canvas.height/7)
+    console.log(head.value.x,head.value.y)
     // Clear canvas
     ctx.clearRect(rect.left,rect.top,canvas.width,canvas.height)
 
@@ -100,12 +109,12 @@ function play() {
     drawApple()
 
     // Change corodinates
-    x += dx;
-    y += dy;
+    head.value.x += dx;
+    head.value.y += dy;
 
 
     // Border detection
-    if ((x == 0)||(x == canvas.width)||(y == 0)||(y == canvas.height)) {
+    if ((head.value.x == 0)||(head.value.x == canvas.width)||(head.value.y == 0)||(head.value.y == canvas.height)) {
         clearTimeout(timeoutId)
     }
 
@@ -125,7 +134,7 @@ function modal() {
 function drawHead() {
 
     ctx.beginPath();
-    ctx.rect(x,y,-length/6,-size);
+    ctx.rect(head.value.x,head.value.y,-length/6,-size);
     ctx.fillStyle = "#f00";
     ctx.fill();
     ctx.closePath();
@@ -135,19 +144,19 @@ function drawHead() {
 // Draw body
 function drawBody() {
     ctx.beginPath();
-    ctx.moveTo(a,b);
-    ctx.lineTo(x,y-size/2)
+    ctx.moveTo(tail.value.x,tail.value.y);
+    ctx.lineTo(head.value.x,head.value.y-size/2)
     ctx.lineWidth = size;
     ctx.strokeStyle = "#fff"
     ctx.stroke()
-    a += dx
-    b += dy
+    tail.value.x += dx
+    tail.value.y += dy
     ctx.closePath()
 }
 
 function drawApple() {
 
-    if ((s <= x)&&(t <= y)&&(x <= s + size)&&(y <= t + size)) {
+    if ((s <= head.value.x)&&(t <= head.value.y)&&(head.value.x <= s + size)&&(head.value.y <= t + size)) {
         console.log("T is :"+t,"S is :"+s)
         s = (Math.floor(Math.random()*20))*gridX+rect.left
         t = (Math.floor(Math.random()*10))*gridY+rect.top
@@ -165,5 +174,19 @@ function drawApple() {
 function timeout() {
 
     timeoutId = setTimeout(play,delay)
+
+}
+
+
+// Draw raw line
+function drawLine(a,b) {
+
+    ctx.beginPath()
+    ctx.moveTo(a.x,a.y)
+    ctx.lineTo(b.x,b.y)
+    ctx.lineWidth = size
+    ctx.fillStyle = "#fff"
+    ctx.stroke()
+    ctx.closPath()
 
 }
