@@ -3,8 +3,8 @@ class coordinates {
 
     constructor(x,y) {
 
-        this.x = 0;
-        this.y = 0;
+        this.x = x;
+        this.y = y;
 
     }
 
@@ -14,8 +14,8 @@ class node {
 
     constructor(value,next) {
 
-        this.value = new coordinates(0,0);
-        this.next = null;
+        this.value = value;
+        this.next = next;
 
     }
 

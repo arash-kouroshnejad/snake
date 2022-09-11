@@ -2,6 +2,21 @@ snake1 = document.getElementById("snake1")
 snake2 = document.getElementById("snake2")
 snake3 = document.getElementById("snake3")
 
+function range(start,end) {
+
+    let range = []
+
+   let i = start;
+
+   while (i<= end) {
+       range.push([i])
+       i += 0.1
+   }
+
+   return range;
+
+}
+
 function selectSnake(el) {
     let data = {"snake" : el.id }
     data = JSON.stringify(data)
@@ -33,7 +48,7 @@ function selectSnake(el) {
 
             // Dimensions
             size = 10
-            length = 40;
+            length = 70;
 
 
             // Delay
@@ -47,7 +62,7 @@ function selectSnake(el) {
             head = new coordinates(x,y) 
             head = new node(head,null)
             a = head.value.x - length;
-            b = head.value.y;
+            b = head.value.y - size/2;
             tail = new coordinates(a,b)
             tail = new node(tail,head)
 
@@ -134,7 +149,7 @@ function modal() {
 function drawHead() {
 
     ctx.beginPath();
-    ctx.rect(head.value.x,head.value.y,-length/6,-size);
+    ctx.rect(head.value.x,head.value.y,-10,-size);
     ctx.fillStyle = "#f00";
     ctx.fill();
     ctx.closePath();
@@ -143,10 +158,11 @@ function drawHead() {
 
 // Draw body
 function drawBody() {
+    ctx.lineWidth = size;
     ctx.beginPath();
     ctx.moveTo(tail.value.x,tail.value.y);
-    ctx.lineTo(head.value.x,head.value.y-size/2)
-    ctx.lineWidth = size;
+    ctx.lineTo(head.value.x - 10,head.value.y - size/2);
+    console.log(head.value.x,head.value.y,tail.value.x,tail.value.y)
     ctx.strokeStyle = "#fff"
     ctx.stroke()
     tail.value.x += dx
@@ -156,10 +172,11 @@ function drawBody() {
 
 function drawApple() {
 
-    if ((s <= head.value.x)&&(t <= head.value.y)&&(head.value.x <= s + size)&&(head.value.y <= t + size)) {
+    if ((head.value.x in range(s,s+size))&&(head.value.y in range(t,t+size))) {
         console.log("T is :"+t,"S is :"+s)
         s = (Math.floor(Math.random()*20))*gridX+rect.left
         t = (Math.floor(Math.random()*10))*gridY+rect.top
+        length = length * 1.5
         console.log("T is :"+t,"S is :"+s)
     }
 
@@ -190,3 +207,5 @@ function drawLine(a,b) {
     ctx.closPath()
 
 }
+
+
