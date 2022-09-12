@@ -102,9 +102,8 @@ function play() {
     if (typeof x == 'undefined') {
         x = rect.top + canvas.width/2;
         y = rect.left + canvas.height/2;
-        s = (Math.floor(Math.random()*20))*gridX+rect.left
-        t = (Math.floor(Math.random()*10))*gridY+rect.top
-
+        s = (Math.floor(Math.random()*20))*gridX
+        t = (Math.floor(Math.random()*10))*gridY
         //Head & Tail
         head = new coordinates(x,y) 
         head = new node(head,null)
@@ -128,8 +127,11 @@ function play() {
     drawApple()
 
     // Change corodinates
-    x += dx;
-    y += dy;
+    head.value.x += dx;
+    head.value.y += dy;
+    tail.value.x += dx;
+    tail.value.y += dy;
+
 
 
     // Border detection
@@ -177,14 +179,14 @@ function drawApple() {
 
     if ((s <= head.value.x)&&(t <= head.value.y)&&(head.value.x <= s + size)&&(head.value.y <= t + size)) {
         console.log("T is :"+t,"S is :"+s)
-        s = (Math.floor(Math.random()*20))*gridX+rect.left
-        t = (Math.floor(Math.random()*10))*gridY+rect.top
+        s = (Math.floor(Math.random()*20))*gridX
+        t = (Math.floor(Math.random()*10))*gridY
         length = length * 1.5
         console.log("T is :"+t,"S is :"+s)
     }
 
     ctx.beginPath();
-    ctx.rect(rect.left+s,rect.top+t,size,size)
+    ctx.rect(s,t,size,size)
     ctx.fillStyle = "#f00";
     ctx.fill();
     ctx.closePath()
