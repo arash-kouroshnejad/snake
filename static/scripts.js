@@ -18,6 +18,9 @@ function range(start,end) {
 }
 
 function selectSnake(el) {
+    i = 0;
+    knee = [];
+    knee[0] = undefined;
     let data = {"snake" : el.id }
     data = JSON.stringify(data)
     let ajax = new XMLHttpRequest();
@@ -64,18 +67,26 @@ function selectSnake(el) {
                 if (event.key == "Right"||event.key == "ArrowRight") {
                     dx = gridX
                     dy = 0
+                    add(e,i)
+                    i++
                 }
                 if (event.key == "Left"||event.key == "ArrowLeft") {
                     dx = -gridX
                     dy = 0
+                    add(e,i)
+                    i++
                 }
                 if (event.key == "Down"||event.key == "ArrowDown") {
                     dy = gridY
                     dx = 0
+                    add(e,i)
+                    i++
                 }
                 if (event.key == "Up"||event.key == "ArrowUp") {
                     dy = -gridY
                     dx = 0
+                    add(e,i)
+                    i++
                 }
             })
 
@@ -165,14 +176,26 @@ function drawHead() {
 // Draw body
 function drawBody() {
     ctx.lineWidth = size;
+    /**
     ctx.beginPath();
     ctx.moveTo(tail.value.x,tail.value.y);
     ctx.lineTo(head.value.x - 10,head.value.y - size/2);
     ctx.strokeStyle = "#fff"
     ctx.stroke()
-    a += dx
-    b += dy
     ctx.closePath()
+    **/
+   if (!(typeof knee[0] == 'undefined')) {
+    debugger;
+        drawLine(tail,knee[0])
+        for(n=1;n<i-1;n++) {
+
+                drawLine(knee[n],knee[n+1])
+
+        }
+        drawLine(knee[i-1],head)
+   }
+   debugger;
+   drawLine(tail,head)
 }
 
 function drawApple() {
@@ -203,13 +226,11 @@ function timeout() {
 // Draw raw line
 function drawLine(a,b) {
 
-    ctx.beginPath()
-    ctx.moveTo(a.x,a.y)
-    ctx.lineTo(b.x,b.y)
-    ctx.lineWidth = size
-    ctx.fillStyle = "#fff"
-    ctx.stroke()
-    ctx.closPath()
+    if ((a.value.x==b.value.x)&&(a.value.y==b.value.y)) {
+
+        remove(b,n)
+
+    }
 
 }
 
