@@ -125,7 +125,6 @@ function play() {
 
 
     // Draw apple
-    debugger;
     drawApple()
 
     // Change corodinates
@@ -176,7 +175,7 @@ function drawBody() {
 
 function drawApple() {
 
-    if ((s <= x)&&(t <= y)&&(x <= s + size)&&(y <= t + size)) {
+    if ((s <= head.value.x)&&(t <= head.value.y)&&(head.value.x <= s + size)&&(head.value.y <= t + size)) {
         console.log("T is :"+t,"S is :"+s)
         s = (Math.floor(Math.random()*20))*gridX+rect.left
         t = (Math.floor(Math.random()*10))*gridY+rect.top
