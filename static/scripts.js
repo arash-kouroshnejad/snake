@@ -9,8 +9,8 @@ function range(start,end) {
    let i = start;
 
    while (i<= end) {
-       range.push([i])
-       i += 0.1
+       range.push(i)
+       i += 0.2
    }
 
    return range;
@@ -34,16 +34,12 @@ function selectSnake(el) {
 
             // Grabbing canvas reference
             canvas = document.getElementById("canvas")
-            rect = canvas.getBoundingClientRect()
             ctx = canvas.getContext("2d")
 
             // Coordinates
             gridX = canvas.width/20;
             gridY = canvas.height/10;
-            x = rect.top + canvas.width/2;
-            y = rect.left + canvas.height/2;
-            s = (Math.floor(Math.random()*20))*gridX+rect.left
-            t = (Math.floor(Math.random()*10))*gridY+rect.top
+            
 
 
             // Dimensions
@@ -57,15 +53,6 @@ function selectSnake(el) {
             // Change snake coordinates
             dx = gridX
             dy = 0
-
-            //Head & Tail
-            head = new coordinates(x,y) 
-            head = new node(head,null)
-            a = head.value.x - length;
-            b = head.value.y - size/2;
-            tail = new coordinates(a,b)
-            tail = new node(tail,head)
-
 
 
             // Looping canvas drawing 
@@ -111,9 +98,26 @@ snake3.addEventListener("click",function () {
 
 // play
 function play() {
-    console.log(head.value.x,head.value.y)
+    rect = canvas.getBoundingClientRect()
+    if (typeof x == 'undefined') {
+        x = rect.top + canvas.width/2;
+        y = rect.left + canvas.height/2;
+        s = (Math.floor(Math.random()*20))*gridX+rect.left
+        t = (Math.floor(Math.random()*10))*gridY+rect.top
+
+        //Head & Tail
+        head = new coordinates(x,y) 
+        head = new node(head,null)
+        a = head.value.x - length;
+        b = head.value.y - size/2;
+        tail = new coordinates(a,b)
+        tail = new node(tail,head)
+    }
+
+
+
     // Clear canvas
-    ctx.clearRect(rect.left,rect.top,canvas.width,canvas.height)
+    ctx.clearRect(0,0,canvas.width,canvas.height)
 
     // Draw snake
     drawHead();
@@ -121,6 +125,7 @@ function play() {
 
 
     // Draw apple
+    debugger;
     drawApple()
 
     // Change corodinates
@@ -162,7 +167,6 @@ function drawBody() {
     ctx.beginPath();
     ctx.moveTo(tail.value.x,tail.value.y);
     ctx.lineTo(head.value.x - 10,head.value.y - size/2);
-    console.log(head.value.x,head.value.y,tail.value.x,tail.value.y)
     ctx.strokeStyle = "#fff"
     ctx.stroke()
     tail.value.x += dx
@@ -171,8 +175,8 @@ function drawBody() {
 }
 
 function drawApple() {
-
-    if ((head.value.x in range(s,s+size))&&(head.value.y in range(t,t+size))) {
+    if ((head.value.x+rect.left in range(s,s+size))&&(head.value.y+rect.top in range(t,t+size))) {
+        debugger;
         console.log("T is :"+t,"S is :"+s)
         s = (Math.floor(Math.random()*20))*gridX+rect.left
         t = (Math.floor(Math.random()*10))*gridY+rect.top
