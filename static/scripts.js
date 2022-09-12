@@ -129,12 +129,12 @@ function play() {
     drawApple()
 
     // Change corodinates
-    head.value.x += dx;
-    head.value.y += dy;
+    x += dx;
+    y += dy;
 
 
     // Border detection
-    if ((head.value.x == 0)||(head.value.x == canvas.width)||(head.value.y == 0)||(head.value.y == canvas.height)) {
+    if ((x == 0)||(x == canvas.width)||(y == 0)||(y == canvas.height)) {
         clearTimeout(timeoutId)
     }
 
@@ -169,14 +169,14 @@ function drawBody() {
     ctx.lineTo(head.value.x - 10,head.value.y - size/2);
     ctx.strokeStyle = "#fff"
     ctx.stroke()
-    tail.value.x += dx
-    tail.value.y += dy
+    a += dx
+    b += dy
     ctx.closePath()
 }
 
 function drawApple() {
-    if ((head.value.x+rect.left in range(s,s+size))&&(head.value.y+rect.top in range(t,t+size))) {
-        debugger;
+
+    if ((s <= x)&&(t <= y)&&(x <= s + size)&&(y <= t + size)) {
         console.log("T is :"+t,"S is :"+s)
         s = (Math.floor(Math.random()*20))*gridX+rect.left
         t = (Math.floor(Math.random()*10))*gridY+rect.top
