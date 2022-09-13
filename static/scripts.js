@@ -1,26 +1,13 @@
 snake1 = document.getElementById("snake1")
 snake2 = document.getElementById("snake2")
 snake3 = document.getElementById("snake3")
+knee = []
+knee[1] = undefined;
 
-function range(start,end) {
-
-    let range = []
-
-   let i = start;
-
-   while (i<= end) {
-       range.push(i)
-       i += 0.2
-   }
-
-   return range;
-
-}
 
 function selectSnake(el) {
-    i = 0;
+    i = 1;
     knee = [];
-    knee[0] = undefined;
     let data = {"snake" : el.id }
     data = JSON.stringify(data)
     let ajax = new XMLHttpRequest();
@@ -62,33 +49,33 @@ function selectSnake(el) {
             timeout()
 
             // Key Pad
-            document.addEventListener("keydown", function () {
+            document.addEventListener("keydown",function () {
 
                 if (event.key == "Right"||event.key == "ArrowRight") {
                     dx = gridX
                     dy = 0
-                    add(e,i)
+                    add(event,i)
                     i++
                 }
                 if (event.key == "Left"||event.key == "ArrowLeft") {
                     dx = -gridX
                     dy = 0
-                    add(e,i)
+                    add(event,i)
                     i++
                 }
                 if (event.key == "Down"||event.key == "ArrowDown") {
                     dy = gridY
                     dx = 0
-                    add(e,i)
+                    add(event,i)
                     i++
                 }
                 if (event.key == "Up"||event.key == "ArrowUp") {
                     dy = -gridY
                     dx = 0
-                    add(e,i)
+                    add(event,i)
                     i++
                 }
-            })
+            });
 
 
 
@@ -124,7 +111,7 @@ function play() {
         tail = new node(tail,head)
     }
 
-
+    knee[0] = tail
 
     // Clear canvas
     ctx.clearRect(0,0,canvas.width,canvas.height)
@@ -156,11 +143,7 @@ function play() {
 
 
 
-// remove modal 
-function modal() {
-    document.getElementById("snake-selector").style.display = "none";
-    document.getElementsByTagName("img")[0].style.display = "none";
-}
+
 
 // Draw head
 function drawHead() {
@@ -176,17 +159,9 @@ function drawHead() {
 // Draw body
 function drawBody() {
     ctx.lineWidth = size;
-    /**
-    ctx.beginPath();
-    ctx.moveTo(tail.value.x,tail.value.y);
-    ctx.lineTo(head.value.x - 10,head.value.y - size/2);
-    ctx.strokeStyle = "#fff"
-    ctx.stroke()
-    ctx.closePath()
-    **/
-   if (!(typeof knee[0] == 'undefined')) {
+   if (!(typeof knee[1] == 'undefined')) {
     debugger;
-        drawLine(tail,knee[0])
+        drawLine(tail,knee[1])
         for(n=1;n<i-1;n++) {
 
                 drawLine(knee[n],knee[n+1])
@@ -194,7 +169,6 @@ function drawBody() {
         }
         drawLine(knee[i-1],head)
    }
-   debugger;
    drawLine(tail,head)
 }
 
@@ -231,6 +205,13 @@ function drawLine(a,b) {
         remove(b,n)
 
     }
+    ctx.beginPath()
+    ctx.moveTo(a.value.x,a.value.y)
+    ctx.lineTo(b.value.x-size,b.value.y-size/2)
+    ctx.lineWidth = size;
+    ctx.strokeStyle = "#fff"
+    ctx.stroke();
+    ctx.closePath()
 
 }
 
