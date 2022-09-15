@@ -7,6 +7,7 @@ knee[1] = undefined;
 
 function selectSnake(el) {
     i = 1;
+    q = 1;
     knee = [];
     let data = {"snake" : el.id }
     data = JSON.stringify(data)
@@ -34,15 +35,25 @@ function selectSnake(el) {
 
             // Dimensions
             size = 10
-            length = 70;
+            length = 75;
 
 
             // Delay
-            delay = 200
+            delay = 300
 
             // Change snake coordinates
             dx = gridX
             dy = 0
+            tx = gridX
+            ty = 0
+
+
+            // Colors 
+            lineColor = "#fff#494cf5"
+            headColor = "#f00#494cf5"
+            tailColor = "##494cf5"
+            kneeColor = "##494cf5"
+            appleColor = "#f00"
 
 
             // Looping canvas drawing 
@@ -54,30 +65,32 @@ function selectSnake(el) {
                 if (event.key == "Right"||event.key == "ArrowRight") {
                     dx = gridX
                     dy = 0
-                    add(event,i)
+                    directions[i] = new direction(dx,dy)
+                    turn(event.key)
                     i++
                 }
                 if (event.key == "Left"||event.key == "ArrowLeft") {
                     dx = -gridX
                     dy = 0
-                    add(event,i)
+                    directions[i] = new direction(dx,dy)
+                    turn(event.key)
                     i++
                 }
                 if (event.key == "Down"||event.key == "ArrowDown") {
                     dy = gridY
                     dx = 0
-                    add(event,i)
+                    directions[i] = new direction(dx,dy)
+                    turn(event.key)
                     i++
                 }
                 if (event.key == "Up"||event.key == "ArrowUp") {
                     dy = -gridY
                     dx = 0
-                    add(event,i)
+                    directions[i] = new direction(dx,dy)
+                    turn(event.key)
                     i++
                 }
             });
-
-
 
         }
     }
@@ -94,6 +107,7 @@ snake3.addEventListener("click",function () {
     selectSnake(event.srcElement);
 });
 
+
 // play
 function play() {
     rect = canvas.getBoundingClientRect()
@@ -104,11 +118,13 @@ function play() {
         t = (Math.floor(Math.random()*10))*gridY
         //Head & Tail
         head = new coordinates(x,y) 
-        head = new node(head,null)
+        head = new node(head,null,null)
         a = head.value.x - length;
-        b = head.value.y - size/2;
+        b = head.value.y;
         tail = new coordinates(a,b)
-        tail = new node(tail,head)
+        tail = new node(tail,head,null)
+        directions = []
+        directions[0] = new direction(dx,dy)
     }
 
     knee[0] = tail
@@ -118,18 +134,30 @@ function play() {
 
     // Draw snake
     drawHead();
+
+
+    // Change head corodinates
+    head.value.x += dx;
+    head.value.y += dy;
+
+
     drawBody();
+
+    // Change tail coordinates
+    tail.value.x += tx;
+    tail.value.y += ty;
+    
+    /**
+     * tail direction :
+     * 0 => right 
+     * 1 => up
+     * 2 => left
+     * 3 => down
+     */
 
 
     // Draw apple
     drawApple()
-
-    // Change corodinates
-    head.value.x += dx;
-    head.value.y += dy;
-    tail.value.x += dx;
-    tail.value.y += dy;
-
 
 
     // Border detection
@@ -143,76 +171,10 @@ function play() {
 
 
 
-
-
-// Draw head
-function drawHead() {
-
-    ctx.beginPath();
-    ctx.rect(head.value.x,head.value.y,-10,-size);
-    ctx.fillStyle = "#f00";
-    ctx.fill();
-    ctx.closePath();
-
-}
-
-// Draw body
-function drawBody() {
-    ctx.lineWidth = size;
-   if (!(typeof knee[1] == 'undefined')) {
-    debugger;
-        drawLine(tail,knee[1])
-        for(n=1;n<i-1;n++) {
-
-                drawLine(knee[n],knee[n+1])
-
-        }
-        drawLine(knee[i-1],head)
-   }
-   drawLine(tail,head)
-}
-
-function drawApple() {
-
-    if ((s <= head.value.x)&&(t <= head.value.y)&&(head.value.x <= s + size)&&(head.value.y <= t + size)) {
-        console.log("T is :"+t,"S is :"+s)
-        s = (Math.floor(Math.random()*20))*gridX
-        t = (Math.floor(Math.random()*10))*gridY
-        length = length * 1.5
-        console.log("T is :"+t,"S is :"+s)
-    }
-
-    ctx.beginPath();
-    ctx.rect(s,t,size,size)
-    ctx.fillStyle = "#f00";
-    ctx.fill();
-    ctx.closePath()
-
-}
-
+// Sets a timeout loop
 function timeout() {
 
     timeoutId = setTimeout(play,delay)
 
 }
-
-
-// Draw raw line
-function drawLine(a,b) {
-
-    if ((a.value.x==b.value.x)&&(a.value.y==b.value.y)) {
-
-        remove(b,n)
-
-    }
-    ctx.beginPath()
-    ctx.moveTo(a.value.x,a.value.y)
-    ctx.lineTo(b.value.x-size,b.value.y-size/2)
-    ctx.lineWidth = size;
-    ctx.strokeStyle = "#fff"
-    ctx.stroke();
-    ctx.closePath()
-
-}
-
 
