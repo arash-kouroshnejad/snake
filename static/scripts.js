@@ -147,22 +147,15 @@ function play() {
     tail.value.x += tx;
     tail.value.y += ty;
     
-    /**
-     * tail direction :
-     * 0 => right 
-     * 1 => up
-     * 2 => left
-     * 3 => down
-     */
-
 
     // Draw apple
     drawApple()
 
 
     // Border detection
-    if ((x == 0)||(x == canvas.width)||(y == 0)||(y == canvas.height)) {
-        clearTimeout(timeoutId)
+    if ((head.value.x-2*dx < 0)||(head.value.x-2*dx > canvas.width)||(head.value.y-2*dy < 0)||(head.value.y-2*dy > canvas.height)) {
+        canvas.style.display = "none"
+        alert("you loooooost!")
     }
 
     timeout()

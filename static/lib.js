@@ -164,10 +164,9 @@ function drawBody() {
 function drawApple() {
 
     if ((s <= head.value.x)&&(t <= head.value.y)&&(head.value.x <= s + size)&&(head.value.y <= t + size)) {
-        console.log("T is :"+t,"S is :"+s)
+        sound("crunch")
         s = (Math.floor(Math.random()*20))*gridX
         t = (Math.floor(Math.random()*10))*gridY
-        length = length * 1.5
         console.log("T is :"+t,"S is :"+s)
     }
 
@@ -229,3 +228,33 @@ function range(a,x) {
 }
 
 
+// Playes in-game audio
+function sound(type) {
+
+    if (type == "crash") {
+
+        var sound = new Audio("./static/SoundEffects/Heavy-Impact(1).mp3")
+        sound.play()
+        sound.addEventListener("ended",function () {
+
+            sound.currentTime = 0 
+            sound.pause()
+            delete(sound)
+
+        })
+
+    }
+    if (type == "crunch") {
+
+        var sound = new Audio("./static/SoundEffects/Crunch.mp3")
+        sound.play()
+        sound.addEventListener("ended",function () {
+
+            sound.currentTime = 0
+            sound.pause()
+
+        })
+
+    }
+
+}
