@@ -49,11 +49,26 @@ function selectSnake(el) {
 
 
             // Colors 
-            lineColor = "#fff#494cf5"
-            headColor = "#f00#494cf5"
-            tailColor = "##494cf5"
-            kneeColor = "##494cf5"
+            kneeColor = tailColor = lineColor = headColor = "#494cf5"
             appleColor = "#f00"
+
+            if (el == snake1) {
+
+                canvas.style.background = "#87e650"
+                kneeColor = tailColor = lineColor = headColor = "#000"
+
+            }
+            if (el == snake2) {
+
+                canvas.style.background = "#e3da30"
+                kneeColor = tailColor = lineColor = headColor = "#579c25"
+
+            }
+            if (el == snake3) {
+
+                canvas.style.background = "#9dd93d"
+
+            }
 
 
             // Looping canvas drawing 
@@ -108,6 +123,8 @@ snake3.addEventListener("click",function () {
 });
 
 
+
+
 // play
 function play() {
     rect = canvas.getBoundingClientRect()
@@ -153,9 +170,10 @@ function play() {
 
 
     // Border detection
-    if ((head.value.x-2*dx < 0)||(head.value.x-2*dx > canvas.width)||(head.value.y-2*dy < 0)||(head.value.y-2*dy > canvas.height)) {
+    if ((head.value.x < -20)||(head.value.x > canvas.width + 20)||(head.value.y < -20)||(head.value.y > canvas.height + 20)) {
         canvas.style.display = "none"
         alert("you loooooost!")
+        location.reload()
     }
 
     timeout()

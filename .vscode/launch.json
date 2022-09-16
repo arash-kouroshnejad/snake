@@ -1,0 +1,11 @@
+{
+    "configurations": [
+    
+        {
+            "type": "pwa-chrome",
+            "name": "Snake",
+            "request": "launch",
+            "url": "http://localhost:5000"
+        }
+    ]
+}

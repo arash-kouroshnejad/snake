@@ -171,7 +171,7 @@ function drawApple() {
     }
 
     ctx.beginPath();
-    ctx.rect(s,t,size,size)
+    ctx.arc(s,t,size/2,0,2*Math.PI)
     ctx.fillStyle = appleColor;
     ctx.fill();
     ctx.closePath()
