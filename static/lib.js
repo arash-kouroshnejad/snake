@@ -258,3 +258,36 @@ function sound(type) {
     }
 
 }
+
+function turnRight() {
+
+    
+
+}
+function turnLeft() {
+
+    dx = -gridX
+    dy = 0
+    directions[i] = new direction(dx,dy)
+    turn(event.key)
+    i++
+
+}
+function turnUp() {
+
+    dy = -gridY
+    dx = 0
+    directions[i] = new direction(dx,dy)
+    turn(event.key)
+    i++
+
+}
+function turnDown() {
+
+    dy = gridY
+    dx = 0
+    directions[i] = new direction(dx,dy)
+    turn(event.key)
+    i++
+
+}

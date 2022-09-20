@@ -82,30 +82,73 @@ function selectSnake(el) {
                     dy = 0
                     directions[i] = new direction(dx,dy)
                     turn(event.key)
-                    i++
+                    i++ 
                 }
                 if (event.key == "Left"||event.key == "ArrowLeft") {
                     dx = -gridX
                     dy = 0
                     directions[i] = new direction(dx,dy)
                     turn(event.key)
-                    i++
-                }
+                    i++                }
                 if (event.key == "Down"||event.key == "ArrowDown") {
                     dy = gridY
                     dx = 0
                     directions[i] = new direction(dx,dy)
                     turn(event.key)
-                    i++
-                }
+                    i++                }
                 if (event.key == "Up"||event.key == "ArrowUp") {
                     dy = -gridY
                     dx = 0
                     directions[i] = new direction(dx,dy)
                     turn(event.key)
-                    i++
-                }
+                    i++                }
             });
+            
+            right = document.getElementById("right")
+            left = document.getElementById("left")
+            top = document.getElementById("up")
+            bottom = document.getElementById("down")
+            top.addEventListener("click",function() {
+
+                debugger
+                dy = -gridY
+                dx = 0
+                directions[i] = new direction(dx,dy)
+                turn(event.key)
+                i++
+                
+            });
+            left.addEventListener("click",function() {
+
+                debugger
+                dx = -gridX
+                dy = 0
+                directions[i] = new direction(dx,dy)
+                turn(event.key)
+                i++
+
+            });
+            right.addEventListener("click",function() {
+
+                debugger
+                dx = gridX
+                dy = 0
+                directions[i] = new direction(dx,dy)
+                turn(event.key)
+                i++                 
+
+            });
+            bottom.addEventListener("click",function() {
+
+                debugger
+                dy = gridY
+                dx = 0
+                directions[i] = new direction(dx,dy)
+                turn(event.key)
+                i++
+
+            });
+
 
         }
     }
@@ -142,6 +185,7 @@ function play() {
         tail = new node(tail,head,null)
         directions = []
         directions[0] = new direction(dx,dy)
+
     }
 
     knee[0] = tail
@@ -171,9 +215,14 @@ function play() {
 
     // Border detection
     if ((head.value.x < -20)||(head.value.x > canvas.width + 20)||(head.value.y < -20)||(head.value.y > canvas.height + 20)) {
+        // canvas.style.display = "none"
+        clearTimeout(timeoutId)
+        /** 
+        sound("crash")
         canvas.style.display = "none"
-        alert("you loooooost!")
-        location.reload()
+        alert("you looost")
+        location.replace()
+        **/
     }
 
     timeout()
